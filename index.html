@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>La Bounserie — Médiation • Juridique léger • Administratif</title>
+  <meta name="description" content="La Bounserie : médiation, juridique léger (hors représentation), administratif. Recherche d'activité, pages dédiées par pôle, et contact par email.">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{ --gold:#c9a227; --ink:#0b0f19; --soft:#f7f7f7 }
+    .gold{color:var(--gold)}
+    .bg-ink{background:var(--ink)}
+    .bg-soft{background:var(--soft)}
+    .btn{ display:inline-flex; align-items:center; justify-content:center; border-radius:1rem; padding:.75rem 1.25rem; font-weight:700; box-shadow:0 4px 14px rgba(0,0,0,.08); transition:all .2s ease; background:var(--gold); color:#111 }
+    .btn:hover{ transform:translateY(-1px); box-shadow:0 8px 22px rgba(0,0,0,.12) }
+    .btn-outline{ display:inline-flex; align-items:center; justify-content:center; border-radius:1rem; padding:.75rem 1.25rem; font-weight:700; border:1px solid var(--gold); color:var(--gold) }
+    .card{ border-radius:1rem; background:#fff; box-shadow:0 1px 0 rgba(16,24,40,.04), 0 1px 2px rgba(16,24,40,.06); padding:1rem }
+    .container{ max-width:1120px; margin:0 auto; padding:0 1rem }
+    /* Fond montagnes */
+    .mountains{
+      position:relative; overflow:hidden; isolation:isolate;
+      background:linear-gradient(180deg,#0b0f19 0%, #111827 70%, #182033 100%);
+      color:#fff;
+    }
+    .mountains:before{
+      content:""; position:absolute; inset:0; z-index:0; opacity:.22; background:
+        radial-gradient(60% 40% at 10% 10%, rgba(201,162,39,.5) 0%, rgba(201,162,39,0) 60%),
+        radial-gradient(40% 30% at 90% 0%, rgba(201,162,39,.35) 0%, rgba(201,162,39,0) 70%);
+      pointer-events:none;
+    }
+    .mountains svg{ position:absolute; inset:auto 0 0 0; z-index:0 }
+    .glass{ backdrop-filter:blur(10px); background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18) }
+    /* Simple router transitions */
+    .fade-enter{ opacity:0; transform:translateY(4px) }
+    .fade-enter-active{ opacity:1; transform:none; transition:all .18s ease }
+  </style>
+</head>
+<body class="antialiased text-slate-800">
+  <!-- Nav -->
+  <header class="sticky top-0 z-40 border-b bg-white/80 backdrop-blur">
+    <nav class="container h-16 flex items-center justify-between">
+      <a href="#/" class="font-black tracking-wide text-lg">LA <span class="gold">BOUNSERIE</span></a>
+      <div class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#/" class="hover:text-amber-700">Accueil</a>
+        <a href="#/contact" class="hover:text-amber-700">Contact</a>
+      </div>
+      <button class="md:hidden" aria-label="Menu" onclick="document.getElementById('mob').classList.toggle('hidden')">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h20M4 14h20M4 21h20"/></svg>
+      </button>
+    </nav>
+    <div id="mob" class="md:hidden hidden border-t bg-white">
+      <div class="container py-2 grid gap-2 text-sm">
+        <a href="#/" class="py-2">Accueil</a>
+        <a href="#/contact" class="py-2">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero avec montagnes + barre de recherche -->
+  <section class="mountains">
+    <div class="container relative z-10 py-16 md:py-24 grid gap-8">
+      <div class="grid md:grid-cols-2 items-center gap-10">
+        <div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight">Médiation • Juridique léger • Administratif<br><span class="gold">Trouve l'activité qu'il te faut</span></h1>
+          <p class="mt-4 text-white/80">Recherche instantanée parmi toutes mes activités et leurs pôles. Chaque activité a sa page dédiée. Tous les formulaires m'arrivent directement par email.</p>
+        </div>
+        <div class="glass rounded-2xl p-4">
+          <label class="text-sm text-white/80">Recherche</label>
+          <div class="mt-2 flex items-stretch gap-2">
+            <input id="q" placeholder="ex : URSSAF, relance, rédaction de courrier…" class="flex-1 rounded-xl px-4 py-3 text-slate-900" oninput="performSearch()" />
+            <a href="#/contact" class="btn">Devis</a>
+          </div>
+          <p class="text-xs mt-2 text-white/70">Astuce : tape un mot-clé (CAF, banque, contrat, litige, etc.)</p>
+        </div>
+      </div>
+    </div>
+    <!-- Montagnes SVG -->
+    <svg viewBox="0 0 1440 220" preserveAspectRatio="none" height="220">
+      <path d="M0,180 L200,120 L350,160 L520,90 L700,150 L900,80 L1100,150 L1440,100 L1440,220 L0,220 Z" fill="rgba(201,162,39,.35)"/>
+      <path d="M0,200 L220,140 L420,180 L600,110 L780,160 L1020,120 L1240,170 L1440,140 L1440,220 L0,220 Z" fill="rgba(201,162,39,.20)"/>
+    </svg>
+  </section>
+
+  <!-- App container -->
+  <main id="app" class="container py-10"></main>
+
+  <footer class="border-t">
+    <div class="container py-8 text-sm flex flex-col md:flex-row items-center justify-between gap-3">
+      <p>© <span id="year"></span> La Bounserie — Florian Dussel. Tous droits réservés.</p>
+      <div class="flex items-center gap-4">
+        <a href="#/contact" class="underline hover:text-amber-700">Contact</a>
+        <a href="#/" class="underline hover:text-amber-700">Accueil</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // --- Données remplies à partir de ton PDF ---
+    const DATA = {
+      activities: [
+        {
+          slug: 'assistance-mediation-administrative',
+          title: 'Assistance & Médiation administrative',
+          short: "Accompagnement complet des démarches (CAF, CPAM, URSSAF, impôts, banques, etc.).",
+          description: "Accompagner particuliers, pros et structures dans l’ensemble des démarches administratives, sociales et institutionnelles : simplifier les procédures, garantir la conformité documentaire, fluidifier les échanges.",
+          poles: [
+            { name: 'Formalités & immatriculations', services: ['Création/modification/radiation (INPI, URSSAF, Greffe, CFE)', 'Choix du statut et régime fiscal', 'Déclarations sociales/fiscales', 'Statuts/annonces légales/actes', 'Mises à jour RNE/INSEE'] },
+            { name: 'Gestion admin & relation institutionnelle', services: ['Dossiers CAF/CPAM/MSA/France Travail/Impôts/URSSAF/Préfecture/Mairie', 'Aides publiques (ACRE/ARCE, régionales, subventions)', 'Suivi des courriers officiels', 'Déclarations & attestations', 'Calendrier obligations'] },
+            { name: 'Médiation & résolution amiable', services: ['Locative (bailleurs/locataires/agences)', 'Commerciale (clients/fournisseurs)', 'Échéanciers & protocoles d’accord', 'Prévention des litiges', 'Réunions de médiation & CR', 'Saisine médiateurs publics/sectoriels'] },
+            { name: 'Secrétariat & gestion documentaire', services: ['Courriers pro/administratifs/contractuels', 'Classement/numérisation/archivage', 'Modèles normalisés', 'Suivi d’échéances/relances', 'Vérification de conformité des pièces'] },
+            { name: 'Accompagnement social & démarches perso', services: ['Dossiers logement/santé/emploi/retraite/formation/aides', 'Suivi organismes sociaux', 'Courriers personnels', 'Aide aux formulaires', 'Préparation aux entretiens/convocations'] },
+            { name: 'Aides & subventions', services: ['Identification des aides (régionales/nationales/UE)', 'Montage dossier & justification', 'Suivi financeurs', 'Bilans d’utilisation', 'Veille dispositifs'] },
+            { name: 'Assistance numérique & dématérialisation', services: ['Création/gestion comptes en ligne (impots.gouv, URSSAF, etc.)', 'Télétransmission & vérifications', 'Formation de base plateformes', 'Archivage numérique & structuration'] },
+            { name: 'Coordination & suivi global', services: ['Procédures internes (tableaux de bord, checklists)', 'Synthèses périodiques', 'Coordination des services & partenaires', 'Accompagnement dans la durée'] }
+          ]
+        },
+        {
+          slug: 'conseil-juridique-precontentieux',
+          title: 'Conseil juridique & précontentieux (hors représentation)',
+          short: 'Sécurisation documentaire avant contentieux, conformité légale, dossiers prêts pour conseil/avocat.',
+          description: 'Sécuriser documents/contrats/relations pro avant contentieux et préparer les dossiers (sans représentation en justice).',
+          poles: [
+            { name: 'Analyse & rédaction', services: ['Contrats, conventions, protocoles, chartes, CGV/CGU', 'Relecture & simplification', 'Avenants/résiliations/NDA', 'Vérification mentions & clauses', 'Modèles (devis, attestations, mandats)'] },
+            { name: 'Conformité & obligations', services: ['Contrôles droit commercial/civil/travail', 'Check-lists & registres d’obligations', 'Mentions légales de sites', 'Guides internes & règlements', 'Mises à jour annuelles'] },
+            { name: 'Précontentieux', services: ['Mises en demeure/sommations/réclamations', 'Constitution de dossiers (conseil, avocat, huissier)', 'Argumentaires & chronologies', 'Préparation dossiers prud’homaux/civils', 'Suivi des échanges préalables'] },
+            { name: 'Preuves', services: ['Collecte & tri (écrits, factures, photos)', 'Numérotation/horodatage/archivage', 'Frises chronologiques', 'Conservation sécurisée'] },
+            { name: 'Veille juridique', services: ['Suivi évolutions légales/jurisprudences', 'Notes de mise à jour', 'Adaptation modèles', 'Sensibilisations ciblées'] },
+            { name: 'Médiation & conciliation juridiques', services: ['Préparation dossiers', 'Assistance administrative', 'Accords amiables & suivi', 'Coordination conciliateurs/médiateurs'] },
+            { name: 'Protection des données & RGPD', services: ['Politiques de confidentialité & registres', 'Clauses de sous-traitance', 'Protocoles de sécurité documentaire', 'Formations'] },
+            { name: 'Préparation de procédures', services: ['Rédaction de plaintes/signalements', 'Dossiers complets avec pièces & notes', 'Vérification recevalibilité', 'Transmission/suivi greffes'] }
+          ]
+        },
+        {
+          slug: 'consulting-investigation-administrative',
+          title: 'Consulting & Investigation administrative / stratégique',
+          short: 'Audits, vérifications, solvabilité, réputation, risques & décision.',
+          description: 'Analyser, auditer et vérifier l’information éco/financière/organisationnelle pour appuyer la décision et la prévention des risques.',
+          poles: [
+            { name: 'Enquêtes & vérifications', services: ['Immatriculations, statuts, dirigeants, UBO', 'Antécédents médiatiques', 'Solvabilité & réputation', 'Liens capitalistiques/partenaires'] },
+            { name: 'Audits de conformité & gestion', services: ['Audit administratif/documentaire/financier', 'Cohérence opérations/pièces', 'Conformité contractuelle', 'Audit pré-partenariat/embauche/fusion'] },
+            { name: 'Diagnostic stratégique', services: ['Concurrence, SWOT, positionnement', 'Performance interne', 'Tableaux de bord/indicateurs', 'Recommandations'] },
+            { name: 'Prévention des fraudes', services: ['Contrôle devis/factures', 'Traçabilité des flux', 'Détection anomalies & rapports', 'Formation anti-fraude documentaire'] },
+            { name: 'Études & prospectives', services: ['Faisabilité & viabilité', 'Évaluation risques/opportunités', 'Scénarios & modélisations', 'Rapports d’analyse'] },
+            { name: 'Infos confidentielles', services: ['Protocoles de confidentialité', 'Archivage sécurisé & accès', 'Protection des données sensibles', 'Conformité RGPD'] }
+          ]
+        },
+        {
+          slug: 'strategie-developpement',
+          title: 'Stratégie & Développement d’entreprise',
+          short: 'Organisation, croissance, transformation, pilotage durable.',
+          description: 'Accompagnement des structures dans l’organisation, la croissance et la transformation.',
+          poles: [
+            { name: 'Diagnostic organisationnel', services: ['Modèle économique & coûts', 'Processus & décisions', 'Analyse managériale', 'Recommandations'] },
+            { name: 'Planification stratégique', services: ['Business plan & relance', 'Feuilles de route', 'KPIs & tableaux de bord', 'Suivi & reporting'] },
+            { name: 'Gestion de crise', services: ['Trésorerie & assainissement', 'Négociation de dettes', 'PCA & redressement', 'Communication de crise'] },
+            { name: 'Organisation & management', services: ['Organigrammes & fiches de poste', 'RACI & responsabilités', 'Priorités & temps', 'Management participatif'] },
+            { name: 'Performance & pilotage', services: ['Productivité', 'Optimisation charges/ressources', 'Rentabilité', 'Coaching opérationnel'] }
+          ]
+        },
+        {
+          slug: 'veille-conformite-documentaire',
+          title: 'Veille & Conformité documentaire',
+          short: 'Garantir la conformité réglementaire et la traçabilité des documents.',
+          description: 'Veille réglementaire, contrôle de conformité, gestion documentaire, RGPD.',
+          poles: [
+            { name: 'Veille réglementaire', services: ['Suivi lois/décrets/obligations', 'Alertes d’échéances', 'Mises à jour de procédures'] },
+            { name: 'Contrôle de conformité', services: ['Vérification contrats/attestations', 'Tableaux de conformité', 'Audits internes', 'Rapports de contrôle'] },
+            { name: 'Gestion documentaire', services: ['Classement & archivage', 'Plans de conservation/destruction', 'Gestion d’accès & sécurité', 'Dématérialisation des flux'] },
+            { name: 'RGPD & sécurité information', services: ['Registre des traitements', 'Sensibilisation', 'Contrôle sous-traitants', 'Protocoles RGPD'] }
+          ]
+        },
+        {
+          slug: 'redaction-communication-pro',
+          title: 'Rédaction & Communication professionnelle',
+          short: 'Documents clairs, rigoureux et conformes pour l’interne et l’externe.',
+          description: 'Assistance complète pour produire, structurer et diffuser des documents pro/administratifs/stratégiques.',
+          poles: [
+            { name: 'Rédaction & reformulation', services: ['Courriers, synthèses, rapports, notes', 'Modèles & trames (contrats, lettres)', 'Relecture/correction', 'Mise en page selon normes', 'Français clair'] },
+            { name: 'Communication institutionnelle', services: ['Communiqués, bilans, plaquettes, guides', 'Messages pour partenaires/administrations/investisseurs', 'Présentations, dossiers presse/entreprise', 'Préparation interventions'] },
+            { name: 'Production & diffusion numérique', services: ['Modèles numériques', 'Mises en page web', 'Publication officielle', 'Communication interne (Drive/Teams)', 'Contenus web (mentions, politiques)'] },
+            { name: 'Archivage & gestion', services: ['Bases documentaires', 'Indexation/référencement', 'Archivage & plan de classement', 'Procédures d’accès/révision/versionnage'] }
+          ]
+        },
+        {
+          slug: 'etudes-techniques-scientifiques',
+          title: 'Études techniques & scientifiques',
+          short: 'Faisabilités, analyses, recherches appliquées, rapports et recommandations.',
+          description: 'Études/analyses/recherches appliquées pour documenter ou optimiser des projets techniques, économiques ou organisationnels.',
+          poles: [
+            { name: 'Faisabilité & diagnostics', services: ['Évaluation technique/méthodo', 'Rentabilité/impact/risques', 'Contraintes légales/matérielles/éco', 'Rapports & recommandations'] },
+            { name: 'Observation & analyse', services: ['Collecte/traitement données', 'Tableaux comparatifs & graphiques', 'Observation procédures', 'Études d’efficacité'] },
+            { name: 'Rédaction scientifique/technique', services: ['Protocoles, cahiers de labo', 'Synthèse d’articles/publications', 'Vulgarisation', 'Restitutions'] },
+            { name: 'Innovation & R&D', services: ['Recherche en SHS/tech', 'Projets R&D & veille', 'Brevets/marques/concepts', 'Coordination science/décideurs'] }
+          ]
+        },
+        {
+          slug: 'formation-accompagnement-pro',
+          title: 'Formation & accompagnement professionnel',
+          short: 'Conception de modules, animation, coaching, suivi pédagogique.',
+          description: 'Transmettre les compétences techniques, administratives et comportementales utiles à la gestion d’une activité.',
+          poles: [
+            { name: 'Conception pédagogique', services: ['Contenus gestion/admin/droit/stratégie/conformité', 'Objectifs, exercices, évaluations', 'Supports (PDF, fiches, slides, vidéos)'] },
+            { name: 'Animation & encadrement', services: ['Formations, ateliers, sessions', 'Coaching individuel', 'Suivi des compétences', 'Mises à jour juridiques'] },
+            { name: 'Professionnalisation', services: ['Reconversion/création d’activité', 'Recherche d’emploi & entretiens', 'Parcours & repositionnement', 'Communication & gestion d’équipe'] },
+            { name: 'Documentation & suivi', services: ['Livrets d’accueil, fiches, guides', 'Archivage supports & attestations', 'Évaluation des sessions & bilans'] }
+          ]
+        },
+        {
+          slug: 'projets-sociaux-institutionnels',
+          title: 'Projets sociaux, institutionnels & territoriaux',
+          short: 'Montage, coordination, évaluation de projets à impact.',
+          description: 'Appui à la conception, coordination et évaluation de projets à dimension sociale/publique/collective.',
+          poles: [
+            { name: 'Conception & montage', services: ['Besoins/objectifs/bénéficiaires', 'Fiches-projets, dossiers techniques, budgets', 'Coordination partenaires', 'Financement & communication'] },
+            { name: 'Partenariats & RP', services: ['Mise en relation collectivités/associations/entreprises', 'Conventions & protocoles', 'Concertations/CoPil', 'CR & suivis'] },
+            { name: 'Suivi & évaluation', services: ['Indicateurs d’impact/efficacité', 'Bilans & rapports', 'Rapports d’exécution financeurs', 'Préparation d’audits'] }
+          ]
+        },
+        {
+          slug: 'developpement-durable-rse',
+          title: 'Développement durable & RSE',
+          short: 'Diagnostics, plans d’action, rapports RSE et conformité ESG.',
+          description: 'Intégrer des stratégies responsables, éthiques et écologiques au fonctionnement global.',
+          poles: [
+            { name: 'Diagnostic & plan d’action', services: ['Audit environnemental/social', 'Évaluation consommations/déchets', 'Plans de réduction d’impact', 'KPIs RSE & bilans émissions'] },
+            { name: 'Rédaction & communication RSE', services: ['Chartes éthiques, codes de conduite', 'Rapports de durabilité', 'Accompagnement ISO/labels', 'Sensibilisations'] },
+            { name: 'Accompagnement stratégique', services: ['Gouvernance & RSE', 'Impact social & territorial', 'Conformité législation ESG', 'Mécénat & engagement sociétal'] }
+          ]
+        },
+        {
+          slug: 'gestion-financiere-recouvrement',
+          title: 'Gestion financière & recouvrement amiable',
+          short: 'Trésorerie, facturation, relances, recouvrement amiable, relations bancaires.',
+          description: 'Sécuriser les flux financiers, prévenir les impayés et structurer la facturation.',
+          poles: [
+            { name: 'Gestion & analyse financière', services: ['Suivi budgétaire/trésorerie', 'Budgets & financements', 'Analyse marges/ratios/coûts', 'Projections & simulations', 'Stratégie financière'] },
+            { name: 'Facturation & règlements', services: ['Devis/factures/avoirs conformes', 'Suivi paiements', 'Relances automatiques', 'Procédures internes', 'Rapprochements'] },
+            { name: 'Recouvrement amiable', services: ['Identification créances', 'Relances & mises en demeure', 'Échéanciers/protocoles', 'Traçabilité des échanges', 'Dossiers contentieux (huissier)'] },
+            { name: 'Relations bancaires & fiscales', services: ['Dossiers de financement', 'Coordination banques/EC', 'Collecte docs fiscaux', 'Obligations administratives/fiscales', 'Assistance TVA (hors représentation)'] }
+          ]
+        },
+        {
+          slug: 'securite-risques-continui',
+          title: 'Sécurité, risques & continuité d’activité',
+          short: 'Cartographie risques, PCA, sécurité documentaire, réputation.',
+          description: 'Identifier, prévenir et réduire les risques pour assurer la continuité des opérations.',
+          poles: [
+            { name: 'Audit des risques', services: ['Cartographie risques', 'Diagnostic sécurité', 'Rapports & recommandations', 'Suivi actions correctives'] },
+            { name: 'Gestion de crise & PCA', services: ['Plans de continuité', 'Procédures d’urgence', 'Coordination incidents', 'Sauvegardes essentielles', 'Tests & exercices'] },
+            { name: 'Sécurité documentaire', services: ['Protection accès & données', 'Politiques de confidentialité', 'Cybersécurité administrative', 'Sauvegardes & clés', 'Conformité RGPD'] },
+            { name: 'Prévention litiges & réputation', services: ['Surveillance conformité interne', 'Vérification communication publique', 'Procédures de réaction', 'Gestion alertes/signalements'] }
+          ]
+        },
+        {
+          slug: 'gestion-immobiliere-locative',
+          title: 'Gestion immobilière & administration locative',
+          short: 'Baux, quittances, relances, conformité diagnostics, dossiers locatifs.',
+          description: 'Encadrer la gestion documentaire, juridique et administrative des biens immobiliers.',
+          poles: [
+            { name: 'Baux & contrats', services: ['Rédaction/Analyse baux hab/com', 'Vérification clauses/charges/diagnostics', 'Révisions/indexations/renouvellements', 'Avenants/attestations'] },
+            { name: 'Gestion locative & financière', services: ['Quittances/reçus/charges', 'Suivi paiements & relances', 'Dépôts de garantie & états des lieux documentaires', 'Déclarations fiscales locatives', 'Médiation en litiges'] },
+            { name: 'Conformité & sécurité des biens', services: ['Contrôle diagnostics', 'Assurances/entretiens/contrôles', 'Obligations légales bailleurs/occupants', 'Mises en conformité & renouvellements'] },
+            { name: 'Contentieux locatif (amiable)', services: ['Courriers & notifications légales', 'Dossiers conciliations/procédures', 'Suivi échanges parties', 'Prévention des impayés'] }
+          ]
+        },
+        {
+          slug: 'numerique-dematerialisation',
+          title: 'Numérique, dématérialisation & transformation digitale',
+          short: 'Moderniser les outils, sécuriser les flux et automatiser.',
+          description: 'Transition vers outils digitaux, workflows, GED, sécurité et RGPD.',
+          poles: [
+            { name: 'Transformation numérique', services: ['Étude de besoins', 'Recommandations solutions', 'Mise en œuvre ERP/CRM/GED', 'Organisation des flux d’info'] },
+            { name: 'Dématérialisation & automatisation', services: ['Numérisation dossiers', 'Formulaires & signatures électroniques', 'Workflows & validations', 'Tableaux de suivi partagés'] },
+            { name: 'Sécurité & conformité', services: ['Protocoles de sécurité', 'Politiques cybersécurité', 'Sauvegardes & restauration', 'Audit RGPD prestataires'] },
+            { name: 'Formation & accompagnement', services: ['Outils bureautiques/cloud/GED', 'Sensibilisation risques', 'Guides d’utilisation', 'Support continu'] }
+          ]
+        },
+        {
+          slug: 'recherche-analyse-observation',
+          title: 'Recherche, analyse & observation sociale',
+          short: 'Études de terrain, data sociale/éco, impacts & prospective.',
+          description: 'Étudier et documenter les dynamiques sociales/éco/institutionnelles pour éclairer la décision.',
+          poles: [
+            { name: 'Terrain & enquêtes', services: ['Questionnaires/entretiens', 'Collecte & traitement', 'Observation des pratiques', 'Rapports & synthèses'] },
+            { name: 'Analyse statistique & reporting', services: ['Indicateurs/KPIs', 'Visualisations', 'Notes de synthèse & comparatifs', 'Supports de restitution'] },
+            { name: 'Documentation & mémoire', services: ['Archives/bases thématiques', 'Numérisation/indexation', 'Chronologies & synthèses historiques', 'Valorisation du patrimoine documentaire'] },
+            { name: 'Impact & prospective', services: ['Évaluations de politiques/Programmes', 'Impacts économiques/territoriaux', 'Tendances & recommandations', 'Prévisions & modèles'] }
+          ]
+        },
+        {
+          slug: 'gestion-projets-audit-operationnel',
+          title: 'Gestion de projets & audit opérationnel',
+          short: 'Pilotage de A à Z, contrôle des processus et amélioration continue.',
+          description: 'Piloter, suivre et évaluer des projets complexes avec cohérence moyens/délais/résultats.',
+          poles: [
+            { name: 'Gestion intégrale', services: ['Objectifs, livrables, KPIs', 'Cahiers des charges & rétroplannings', 'Coordination équipes', 'Suivi budgétaire & reporting', 'Points de contrôle'] },
+            { name: 'Audit opérationnel', services: ['Analyse processus & flux', 'Évaluation performances', 'Mesure efficacité outils/méthodes', 'Rapports & préconisations', 'Amélioration continue'] },
+            { name: 'Gestion documentaire de projet', services: ['Centralisation & suivi', 'Systèmes de validation/archivage', 'Conformité administrative/contractuelle', 'CR & bilans finaux'] },
+            { name: 'Pilotage stratégique', services: ['Risques/opportunités/faisabilité', 'Relations partenaires & institutions', 'Stratégie de communication', 'Bilan & capitalisation'] }
+          ]
+        },
+        {
+          slug: 'accompagnement-economique-financier',
+          title: 'Accompagnement économique & financier',
+          short: 'Prévisionnels, financements, tableaux de bord, risques financiers.',
+          description: 'Soutenir la planification, la rationalisation et la sécurisation du modèle économique.',
+          poles: [
+            { name: 'Études éco & financières', services: ['Faisabilité & diagnostics', 'Seuil de rentabilité & marges', 'Prévisions budgétaires & flux', 'Business plans', 'Analyses d’investissement/ROI'] },
+            { name: 'Gestion & financement', services: ['Recherche de fonds/subventions', 'Dossiers bancaires & prévisionnels', 'BFR & trésorerie', 'Négociations partenaires/financeurs', 'Tableaux de bord'] },
+            { name: 'Reprise & création', services: ['Comparaison de modèles', 'Reprise/rachat d’activité', 'Restructuration/fusion', 'Scénarios de développement', 'Suivi post-création'] },
+            { name: 'Audit & risques financiers', services: ['Détection d’anomalies', 'Coûts cachés', 'Préparation d’audits externes', 'Conformité normes/obligations'] }
+          ]
+        },
+        {
+          slug: 'affaires-publiques-relations-territoriales',
+          title: 'Affaires publiques, institutionnelles & relations territoriales',
+          short: 'Relations avec collectivités/institutions, marchés publics, plaidoyer.',
+          description: 'Coordonner et représenter entre structures privées, institutions publiques et acteurs territoriaux.',
+          poles: [
+            { name: 'Relations institutionnelles', services: ['Collectivités, préfectures, chambres consulaires', 'Correspondances & demandes', 'Réunions/conférences officielles', 'Notes & documents d’info', 'Coordination interinstitutionnelle'] },
+            { name: 'Appels d’offres & marchés', services: ['Veille publications', 'Sélection des AO/AAP', 'Dossiers administratifs & techniques', 'Conformité & dépôts électroniques', 'Suivi procédures'] },
+            { name: 'Coopération & partenariats', services: ['Mise en réseau public/privé', 'Conventions & chartes', 'Projets pluri-acteurs', 'Événements institutionnels/techniques'] },
+            { name: 'Communication & plaidoyer', services: ['Rapports & notes de position', 'Communication publique/territoriale', 'Groupes de travail/comités', 'Suivi de politiques publiques'] }
+          ]
+        },
+        {
+          slug: 'gouvernance-structuration-pilotage',
+          title: 'Gouvernance, structuration & pilotage stratégique',
+          short: 'Clarifier responsabilités, outiller la décision et le suivi.',
+          description: 'Structurer la gouvernance interne : décisions, responsabilités, reporting et coaching dirigeant.',
+          poles: [
+            { name: 'Diagnostic de gouvernance', services: ['Organigrammes & circuits décisionnels', 'Doublons & inefficacités', 'Analyse managériale', 'Rapport de recommandations'] },
+            { name: 'Structuration interne', services: ['Processus décisionnels', 'Chartes & règlements', 'Procédures de validation & délégations', 'Formation management & communication'] },
+            { name: 'Pilotage stratégique', services: ['Comités de pilotage & reporting', 'Objectifs & KPIs', 'Suivi périodique & évaluation', 'Réajustements'] },
+            { name: 'Accompagnement du dirigeant', services: ['Coaching & aide à la décision', 'Préparation réunions/présentations', 'Planification stratégique', 'Reporting annuel global'] }
+          ]
+        },
+        {
+          slug: 'activites-annexes-transversales',
+          title: 'Activités annexes & transversales',
+          short: 'Assistance polyvalente, RH, communication, missions ponctuelles.',
+          description: 'Services compatibles 8211Z/7490B — non réglementés.',
+          poles: [
+            { name: 'Assistance polyvalente', services: ['Gestion courante', 'Préparation de dossiers (notaire/avocat/huissier/expert)', 'Suivi de dossiers particuliers (permis, autorisations)', 'Coordination prestataires', 'Courriers/rdv/plannings'] },
+            { name: 'Juridique & administratif personnel', services: ['Successions, assurances, retraite, logement, divorce (hors représentation)', 'Courriers personnels & réclamations', 'Démarches en ligne & formulaires', 'Conseil droits sociaux & civiques'] },
+            { name: 'Études & recherche', services: ['Études éco/sociales/tech/statistiques', 'Articles/rapports/synthèses', 'Groupes d’étude & enquêtes publiques', 'Projets de recherche/innovation'] },
+            { name: 'Événements professionnels', services: ['Réunions, séminaires, formations, conférences', 'Logistique (lieux, invitations, supports)', 'Gestion intervenants & bilans', 'Suivi post-événement'] },
+            { name: 'Ressources humaines', services: ['Recrutement admin', 'Contrats & avenants RH', 'Plannings & congés', 'Aide à la gestion du personnel'] },
+            { name: 'Appui professions libérales', services: ['Secrétariat externalisé', 'Dossiers clients/patients', 'Agenda/facturation/paiements', 'Conformité documentaire'] },
+            { name: 'Communication & relations extérieures', services: ['Supports visuels', 'Communiqués & publications', 'Mise à jour sites administratifs', 'Image & presse locale'] },
+            { name: 'Conformité interne', services: ['Vérifications périodiques', 'Audits internes', 'Formations à la rigueur documentaire', 'Création service conformité'] },
+            { name: 'Missions exceptionnelles', services: ['Gestion de crise/enquête', 'Intérim admin/direction', 'Coordination temporaire', 'Reprise de dossiers bloqués/urgents'] }
+          ]
+        }
+      ]
+    };
+
+    // --- Router ---
+    const app = document.getElementById('app');
+    function route(){
+      const hash = location.hash.slice(1) || '/';
+      const parts = hash.split('/').filter(Boolean);
+      if(parts.length===0){ renderHome(); return }
+      if(parts[0]==='activity' && parts[1]){ renderActivity(parts[1]); return }
+      if(parts[0]==='contact'){ renderContact(); return }
+      renderNotFound();
+    }
+    window.addEventListener('hashchange', route);
+    window.addEventListener('load', route);
+
+    // --- Helpers UI ---
+    function h(template){ const div=document.createElement('div'); div.innerHTML=template.trim(); return div.firstChild }
+    function mount(el){ app.innerHTML=''; el.classList.add('fade-enter'); app.appendChild(el); requestAnimationFrame(()=>el.classList.add('fade-enter-active')) }
+
+    // --- Home ---
+    function renderHome(){
+      const list = DATA.activities.map(a=>cardActivity(a)).join('');
+      const el = h(`
+        <section class="py-6">
+          <div class="flex items-center justify-between gap-3 mb-4">
+            <h2 class="text-2xl md:text-3xl font-extrabold">Activités</h2>
+            <a href="#/contact" class="btn">Demander un devis</a>
+          </div>
+          <div id="results" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">${list}</div>
+        </section>
+      `);
+      mount(el);
+    }
+
+    function cardActivity(a){
+      const chips = (a.poles||[]).slice(0,4).map(p=>`<span class="px-2 py-1 text-xs rounded-full border border-amber-300/70 text-amber-800 bg-amber-50">${p.name}</span>`).join(' ');
+      return `
+        <article class="card">
+          <div class="flex items-start justify-between gap-2">
+            <h3 class="font-bold text-lg">${a.title}</h3>
+            <a class="btn-outline text-xs" href="#/activity/${a.slug}">Ouvrir</a>
+          </div>
+          <p class="mt-2 text-sm text-slate-600">${a.short}</p>
+          <div class="mt-3 flex flex-wrap gap-2">${chips}</div>
+        </article>
+      `;
+    }
+
+    // --- Activity page ---
+    function renderActivity(slug){
+      const a = DATA.activities.find(x=>x.slug===slug);
+      if(!a){ renderNotFound(); return }
+      const poles = (a.poles||[]).map(p=>`
+        <div class="card">
+          <h4 class="font-semibold">${p.name}</h4>
+          <ul class="mt-2 list-disc list-inside text-sm text-slate-600">
+            ${(p.services||[]).map(s=>`<li>${s}</li>`).join('')}
+          </ul>
+        </div>
+      `).join('');
+      const el = h(`
+        <section class="py-6">
+          <a href="#/" class="text-sm underline">← Retour</a>
+          <div class="mt-2 flex items-center justify-between gap-3">
+            <h2 class="text-2xl md:text-3xl font-extrabold">${a.title}</h2>
+            <a href="#/contact" class="btn">Contacter</a>
+          </div>
+          <p class="mt-2 text-slate-700">${a.description}</p>
+          <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">${poles}</div>
+        </section>
+      `);
+      mount(el);
+    }
+
+    // --- Contact page ---
+    function renderContact(){
+      const el = h(`
+        <section class="py-6">
+          <h2 class="text-2xl md:text-3xl font-extrabold">Contact & demande de devis</h2>
+          <p class="mt-2 text-slate-600">Décrivez votre besoin. Réponse rapide par email.</p>
+          <form class="mt-6 grid md:grid-cols-2 gap-6" action="https://formsubmit.co/floriandussel12@gmail.com" method="POST">
+            <input type="hidden" name="_subject" value="Nouvelle demande via La Bounserie — Médiation" />
+            <input type="hidden" name="_captcha" value="true" />
+            <input type="hidden" name="_template" value="table" />
+            <div class="grid gap-4">
+              <label class="grid gap-1 text-sm">Nom et prénom
+                <input required name="Nom" class="rounded-xl px-4 py-3" placeholder="Votre nom complet" />
+              </label>
+              <label class="grid gap-1 text-sm">Email
+                <input required type="email" name="Email" class="rounded-xl px-4 py-3" placeholder="votrenom@mail.com" />
+              </label>
+              <label class="grid gap-1 text-sm">Téléphone
+                <input name="Téléphone" class="rounded-xl px-4 py-3" placeholder="06 00 00 00 00" />
+              </label>
+            </div>
+            <div class="grid gap-4">
+              <label class="grid gap-1 text-sm">Type de demande
+                <select name="Type" class="rounded-xl px-4 py-3">
+                  <option>Demande de devis</option>
+                  <option>Demande de contact</option>
+                  <option>Renseignement</option>
+                </select>
+              </label>
+              <label class="grid gap-1 text-sm">Votre besoin / message
+                <textarea required name="Message" rows="6" class="rounded-xl px-4 py-3" placeholder="Expliquez votre situation (ex : URSSAF, APL, mise en demeure, dossier banque, etc.)"></textarea>
+              </label>
+              <label class="inline-flex items-center gap-2 text-xs">
+                <input required type="checkbox" class="w-4 h-4" />
+                J'accepte que mes données soient utilisées pour me recontacter (pas de revente, pas de spam).
+              </label>
+              <div class="flex gap-3">
+                <button class="btn" type="submit">Envoyer</button>
+                <a href="mailto:floriandussel12@gmail.com?subject=Contact%20via%20La%20Bounserie" class="btn-outline">Ou par email</a>
+              </div>
+            </div>
+          </form>
+          <div class="mt-6 text-sm text-slate-600">
+            <p><strong>Email :</strong> <a class="underline" href="mailto:floriandussel12@gmail.com">floriandussel12@gmail.com</a> — <strong>Téléphone :</strong> 07 69 44 79 18</p>
+          </div>
+        </section>
+      `);
+      mount(el);
+    }
+
+    // --- 404 ---
+    function renderNotFound(){
+      mount(h(`<section class='py-10'><h2 class='text-2xl font-extrabold'>Page introuvable</h2><p class='text-slate-600 mt-2'>Le lien est invalide.</p><a class='btn mt-4' href="#/">Retour</a></section>`))
+    }
+
+    // --- Recherche ---
+    function performSearch(){
+      const q = (document.getElementById('q').value||'').toLowerCase().trim();
+      if(location.hash !== '#/' && location.hash !== '#'){ location.hash = '#/'; }
+      const results = document.getElementById('results');
+      if(!results) return;
+      const filtered = DATA.activities.filter(a=>{
+        const hay = [a.title, a.short, a.description, ...(a.poles||[]).flatMap(p=>[p.name, ...(p.services||[])])].join(' ').toLowerCase();
+        return hay.includes(q);
+      });
+      results.innerHTML = (q? filtered: DATA.activities).map(a=>cardActivity(a)).join('');
+    }
+  </script>
+</body>
+</html>
