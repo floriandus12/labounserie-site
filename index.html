@@ -429,49 +429,28 @@
       `);
       mount(el);
     }
-
     // --- Contact page ---
     function renderContact(){
       const el = h(`
         <section class="py-6">
           <h2 class="text-2xl md:text-3xl font-extrabold">Contact & demande de devis</h2>
           <p class="mt-2 text-slate-600">Décrivez votre besoin. Réponse rapide par email.</p>
-          <form class="mt-6 grid md:grid-cols-2 gap-6" action="https://formsubmit.co/floriandussel12@gmail.com" method="POST">
-            <input type="hidden" name="_subject" value="Nouvelle demande via La Bounserie — Médiation" />
-            <input type="hidden" name="_captcha" value="true" />
-            <input type="hidden" name="_template" value="table" />
-            <div class="grid gap-4">
-              <label class="grid gap-1 text-sm">Nom et prénom
-                <input required name="Nom" class="rounded-xl px-4 py-3" placeholder="Votre nom complet" />
-              </label>
-              <label class="grid gap-1 text-sm">Email
-                <input required type="email" name="Email" class="rounded-xl px-4 py-3" placeholder="votrenom@mail.com" />
-              </label>
-              <label class="grid gap-1 text-sm">Téléphone
-                <input name="Téléphone" class="rounded-xl px-4 py-3" placeholder="06 00 00 00 00" />
-              </label>
-            </div>
-            <div class="grid gap-4">
-              <label class="grid gap-1 text-sm">Type de demande
-                <select name="Type" class="rounded-xl px-4 py-3">
-                  <option>Demande de devis</option>
-                  <option>Demande de contact</option>
-                  <option>Renseignement</option>
-                </select>
-              </label>
-              <label class="grid gap-1 text-sm">Votre besoin / message
-                <textarea required name="Message" rows="6" class="rounded-xl px-4 py-3" placeholder="Expliquez votre situation (ex : URSSAF, APL, mise en demeure, dossier banque, etc.)"></textarea>
-              </label>
-              <label class="inline-flex items-center gap-2 text-xs">
-                <input required type="checkbox" class="w-4 h-4" />
-                J'accepte que mes données soient utilisées pour me recontacter (pas de revente, pas de spam).
-              </label>
-              <div class="flex gap-3">
-                <button class="btn" type="submit">Envoyer</button>
-                <a href="mailto:floriandussel12@gmail.com?subject=Contact%20via%20La%20Bounserie" class="btn-outline">Ou par email</a>
-              </div>
-            </div>
-          </form>
+         <div class="mt-8 p-6 border border-amber-300/50 rounded-2xl bg-white/50 backdrop-blur">
+  <h3 class="text-xl font-bold mb-2">📬 Contact direct</h3>
+  <p class="text-slate-700 mb-3">
+    Pour toute demande ou devis, contactez-moi directement :
+  </p>
+  <p class="text-lg font-semibold">
+    <a href="mailto:floriandussel12@gmail.com" class="text-amber-600 underline">
+      floriandussel12@gmail.com
+    </a>
+  </p>
+  <p class="mt-2 text-slate-600">
+    ou par téléphone : <strong>07 69 44 79 18</strong>
+  </p>
+  <a href="mailto:floriandussel12@gmail.com?subject=Demande%20-%20La%20Bounserie" class="btn mt-4 inline-block">✉️ M’écrire maintenant</a>
+</div>
+
           <div class="mt-6 text-sm text-slate-600">
             <p><strong>Email :</strong> <a class="underline" href="mailto:floriandussel12@gmail.com">floriandussel12@gmail.com</a> — <strong>Téléphone :</strong> 07 69 44 79 18</p>
           </div>
