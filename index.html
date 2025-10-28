@@ -44,6 +44,7 @@
       <div class="hidden md:flex items-center gap-6 text-sm">
         <a href="#/" class="hover:text-amber-700">Accueil</a>
         <a href="#/contact" class="hover:text-amber-700">Contact</a>
+        <a href="#/apropos" class="hover:text-amber-700">À propos</a>
         <a href="#/institut" class="hover:text-amber-700">Institut Bounserie</a>
       </div>
       <button class="md:hidden" aria-label="Menu" onclick="document.getElementById('mob').classList.toggle('hidden')">
@@ -54,6 +55,8 @@
       <div class="container py-2 grid gap-2 text-sm">
         <a href="#/" class="py-2">Accueil</a>
         <a href="#/contact" class="py-2">Contact</a>
+        <a href="#/apropos" class="py-2">À propos</a>
+        <a href="#/institut" class="py-2">Institut Bounserie</a>
       </div>
     </div>
   </header>
@@ -89,9 +92,16 @@
   <footer class="border-t">
     <div class="container py-8 text-sm flex flex-col md:flex-row items-center justify-between gap-3">
       <p>© <span id="year"></span> La Bounserie — Florian Dussel. Tous droits réservés.</p>
-      <div class="flex items-center gap-4">
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
         <a href="#/contact" class="underline hover:text-amber-700">Contact</a>
         <a href="#/" class="underline hover:text-amber-700">Accueil</a>
+        <a href="#/apropos" class="underline hover:text-amber-700">À propos</a>
+        <a href="https://www.instagram.com/la_bounserie/" target="_blank" class="inline-flex items-center gap-1 whitespace-nowrap hover:text-amber-700">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5 3.5A4.5 4.5 0 0 0 7.5 12 4.5 4.5 0 0 0 12 16.5 4.5 4.5 0 0 0 16.5 12 4.5 4.5 0 0 0 12 7.5zm0 2A2.5 2.5 0 1 1 9.5 12 2.5 2.5 0 0 1 12 9.5zm4.8-3a.8.8 0 1 0 .8.8.8.8 0 0 0-.8-.8z"/>
+          </svg>
+          <span>@la_bounserie</span>
+        </a>
       </div>
     </div>
   </footer>
@@ -361,20 +371,17 @@
 
     // --- Router ---
     const app = document.getElementById('app');
-   function route(){
-  const hash = location.hash.slice(1) || '/';
-  const parts = hash.split('/').filter(Boolean);
-  if(parts.length===0){ renderHome(); return }
-  if(parts[0]==='activity' && parts[1]){ renderActivity(parts[1]); return }
-  if(parts[0]==='contact'){ renderContact(); return }
-  if(parts[0]==='institut'){ renderInstitut(); return }   
-     // if(parts[0]==='institut'){ renderInstitut(); return }
-
-  renderNotFound();
-}
-
+    function route(){
+      const hash = location.hash.slice(1) || '/';
+      const parts = hash.split('/').filter(Boolean);
+      if(parts.length === 0){ renderHome(); return }
+      if(parts[0] === 'activity' && parts[1]){ renderActivity(parts[1]); return }
+      if(parts[0] === 'contact'){ renderContact(); return }
+      if(parts[0] === 'institut'){ renderInstitut(); return }
+      if(parts[0] === 'apropos'){ renderAPropos(); return }
       renderNotFound();
     }
+
     window.addEventListener('hashchange', route);
     window.addEventListener('load', route);
 
@@ -436,27 +443,28 @@
       `);
       mount(el);
     }
+
     // --- Contact page ---
     function renderContact(){
       const el = h(`
         <section class="py-6">
           <h2 class="text-2xl md:text-3xl font-extrabold">Contact & demande de devis</h2>
           <p class="mt-2 text-slate-600">Décrivez votre besoin. Réponse rapide par email.</p>
-         <div class="mt-8 p-6 border border-amber-300/50 rounded-2xl bg-white/50 backdrop-blur">
-  <h3 class="text-xl font-bold mb-2">📬 Contact direct</h3>
-  <p class="text-slate-700 mb-3">
-    Pour toute demande ou devis, contactez-moi directement :
-  </p>
-  <p class="text-lg font-semibold">
-    <a href="mailto:floriandussel12@gmail.com" class="text-amber-600 underline">
-      floriandussel12@gmail.com
-    </a>
-  </p>
-  <p class="mt-2 text-slate-600">
-    ou par téléphone : <strong>07 69 44 79 18</strong>
-  </p>
-  <a href="mailto:floriandussel12@gmail.com?subject=Demande%20-%20La%20Bounserie" class="btn mt-4 inline-block">✉️ M’écrire maintenant</a>
-</div>
+          <div class="mt-8 p-6 border border-amber-300/50 rounded-2xl bg-white/50 backdrop-blur">
+            <h3 class="text-xl font-bold mb-2">📬 Contact direct</h3>
+            <p class="text-slate-700 mb-3">
+              Pour toute demande ou devis, contactez-moi directement :
+            </p>
+            <p class="text-lg font-semibold">
+              <a href="mailto:floriandussel12@gmail.com" class="text-amber-600 underline">
+                floriandussel12@gmail.com
+              </a>
+            </p>
+            <p class="mt-2 text-slate-600">
+              ou par téléphone : <strong>07 69 44 79 18</strong>
+            </p>
+            <a href="mailto:floriandussel12@gmail.com?subject=Demande%20-%20La%20Bounserie" class="btn mt-4 inline-block">✉️ M’écrire maintenant</a>
+          </div>
 
           <div class="mt-6 text-sm text-slate-600">
             <p><strong>Email :</strong> <a class="underline" href="mailto:floriandussel12@gmail.com">floriandussel12@gmail.com</a> — <strong>Téléphone :</strong> 07 69 44 79 18</p>
@@ -465,47 +473,93 @@
       `);
       mount(el);
     }
-function renderInstitut() {
-  const el = h(`
-    <section class="py-6">
-      <h2 class="text-2xl md:text-3xl font-extrabold">Association — Institut Bounserie</h2>
-      <p class="mt-3 text-slate-700 leading-relaxed">
-        L’Institut Bounserie est une future association à but non lucratif qui aura pour vocation de
-        <strong>favoriser la réinsertion, la formation et l’accompagnement social et professionnel</strong>
-        des jeunes, des personnes en reconversion, ou en situation de précarité.
-      </p>
 
-      <p class="mt-3 text-slate-700 leading-relaxed">
-        L’objectif est de créer un lieu d’échange, de transmission et d’apprentissage autour des métiers de la restauration,
-        de la gestion, du développement durable et de la solidarité. L’Institut travaillera en lien avec des partenaires
-        locaux et nationaux pour développer des projets à impact réel et durable.
-      </p>
+    // --- Institut page ---
+    function renderInstitut() {
+      const el = h(`
+        <section class="py-6">
+          <h2 class="text-2xl md:text-3xl font-extrabold">Association — Institut Bounserie</h2>
+          <p class="mt-3 text-slate-700 leading-relaxed">
+            L’Institut Bounserie est une future association à but non lucratif qui aura pour vocation de
+            <strong>favoriser la réinsertion, la formation et l’accompagnement social et professionnel</strong>
+            des jeunes, des personnes en reconversion, ou en situation de précarité.
+          </p>
 
-      <div class="mt-6 p-6 border border-amber-300/50 rounded-2xl bg-white/50 backdrop-blur">
-        <h3 class="text-xl font-bold mb-2">🤝 Soutenir le projet</h3>
-        <p class="text-slate-700 mb-2">
-          Vous souhaitez soutenir la création de l’Institut Bounserie ?<br>
-          Vous pouvez dès à présent <strong>me contacter directement</strong> pour en discuter :
-        </p>
-        <p class="text-lg font-semibold">
-          <a href="mailto:floriandussel12@gmail.com?subject=Soutien%20-%20Institut%20Bounserie" class="text-amber-600 underline">
-            floriandussel12@gmail.com
-          </a>
-        </p>
-        <p class="mt-2 text-slate-600">
-          ou par téléphone : <strong>07 69 44 79 18</strong>
-        </p>
-        <p class="mt-4 text-slate-700 text-sm">
-          🔸 Une fois l’association officiellement créée, une section dédiée permettra de faire des dons en ligne
-          et de participer activement aux actions solidaires de l’Institut.
-        </p>
-      </div>
+          <p class="mt-3 text-slate-700 leading-relaxed">
+            L’objectif est de créer un lieu d’échange, de transmission et d’apprentissage autour des métiers de la restauration,
+            de la gestion, du développement durable et de la solidarité. L’Institut travaillera en lien avec des partenaires
+            locaux et nationaux pour développer des projets à impact réel et durable.
+          </p>
 
-      <a href="#/" class="btn mt-6 inline-block">← Retour à l’accueil</a>
-    </section>
-  `);
-  mount(el);
-}
+          <div class="mt-6 p-6 border border-amber-300/50 rounded-2xl bg-white/50 backdrop-blur">
+            <h3 class="text-xl font-bold mb-2">🤝 Soutenir le projet</h3>
+            <p class="text-slate-700 mb-2">
+              Vous souhaitez soutenir la création de l’Institut Bounserie ?<br>
+              Vous pouvez dès à présent <strong>me contacter directement</strong> pour en discuter :
+            </p>
+            <p class="text-lg font-semibold">
+              <a href="mailto:floriandussel12@gmail.com?subject=Soutien%20-%20Institut%20Bounserie" class="text-amber-600 underline">
+                floriandussel12@gmail.com
+              </a>
+            </p>
+            <p class="mt-2 text-slate-600">
+              ou par téléphone : <strong>07 69 44 79 18</strong>
+            </p>
+            <p class="mt-4 text-slate-700 text-sm">
+              🔸 Une fois l’association officiellement créée, une section dédiée permettra de faire des dons en ligne
+              et de participer activement aux actions solidaires de l’Institut.
+            </p>
+          </div>
+
+          <a href="#/" class="btn mt-6 inline-block">← Retour à l’accueil</a>
+        </section>
+      `);
+      mount(el);
+    }
+
+    // --- À propos page ---
+    function renderAPropos(){
+      const el = h(`
+        <section class="py-8 grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h2 class="text-3xl md:text-4xl font-extrabold mb-4">À propos de la Bounserie</h2>
+            <p class="text-slate-700 leading-relaxed mb-4">
+              La Bounserie est née d’une aventure humaine avant d’être une structure professionnelle.
+              À l’origine, c’est en gérant une brasserie que j’ai découvert la richesse et la complexité
+              du monde de la gestion : comptabilité, administration, statut juridique, management.
+            </p>
+            <p class="text-slate-700 leading-relaxed mb-4">
+              Curieux de tout comprendre, j’ai appris, expérimenté, me suis formé, jusqu’à pouvoir
+              accompagner à mon tour ceux qui en avaient besoin. Je viens du secteur de la restauration — 
+              un milieu exigeant et vivant — et j’ai conservé ce rythme et cette énergie dans ma manière
+              de travailler : rigueur, réactivité et proximité.
+            </p>
+            <p class="text-slate-700 leading-relaxed mb-4">
+              Durant ma gérance, j’ai aussi découvert la dimension <strong>sociale et humaine</strong> du métier.
+              Derrière chaque dossier, il y a une histoire, une personne, un parcours.
+              C’est cette conviction qui m’a poussé à aller plus loin : 
+              <strong>créer l’association “Institut Bounserie”</strong>, dédiée à la réinsertion,
+              à la solidarité et à l’intergénérationnel.
+            </p>
+            <p class="text-slate-700 leading-relaxed mb-4">
+              Mon objectif est simple : <strong>mettre mes compétences au service des autres</strong>,
+              aider à reconstruire, à comprendre, à avancer — que ce soit sur le plan professionnel
+              ou personnel.
+            </p>
+            <p class="text-slate-700 leading-relaxed italic">
+              Parce que derrière chaque difficulté, il y a une possibilité de rebond.
+              Et c’est ce rebond-là que la Bounserie veut inspirer.
+            </p>
+          </div>
+          <div class="flex justify-center">
+            <img src="https://via.placeholder.com/400x400?text=Photo+de+Florian+Dussel" 
+                 alt="Florian Dussel" 
+                 class="rounded-2xl shadow-lg border border-amber-200 max-w-xs">
+          </div>
+        </section>
+      `);
+      mount(el);
+    }
 
     // --- 404 ---
     function renderNotFound(){
@@ -527,3 +581,4 @@ function renderInstitut() {
   </script>
 </body>
 </html>
+
